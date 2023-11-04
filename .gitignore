@@ -1,5 +1,5 @@
 .idea/
-/.class
+*.class
 /target/**
 /target/
 */target/**
