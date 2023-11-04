@@ -1,6 +1,9 @@
 package ergastF1;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -9,11 +12,22 @@ import static org.hamcrest.Matchers.*;
 
 public class ErgastF1Examples1 {
 
+    ResponseSpecification responseSpec;
+
     @BeforeClass
     public void initPath() {
 
         RestAssured.baseURI = "http://ergast.com";
+
     }
+
+    @BeforeClass
+    public void createResponseSpecification() {
+         responseSpec = new ResponseSpecBuilder()
+                 .expectStatusCode(200)
+                 .expectContentType(ContentType.JSON)
+                 .build();
+         }
 
     @Test
     public void checkResponseCodeForCorrectRequest() {
@@ -55,6 +69,8 @@ public class ErgastF1Examples1 {
                 when().
                 get("/api/f1/2014/1/circuits.json").
                 then().
+                spec(responseSpec).
+                and().
                 assertThat().
                 body("MRData.CircuitTable.Circuits.circuitId[0]", equalTo("albert_park"));
     }
@@ -66,6 +82,8 @@ public class ErgastF1Examples1 {
                 when().
                 get("/api/f1/2014/circuits.json").
                 then().
+                spec(responseSpec).
+                and().
                 assertThat().
                 body("MRData.CircuitTable.Circuits.circuitId", hasItem("silverstone"));
     }
@@ -78,6 +96,8 @@ public class ErgastF1Examples1 {
                 when().
                 get("/api/f1/2014/circuits.json").
                 then().
+                spec(responseSpec).
+                and().
                 assertThat().
                 body("MRData.CircuitTable.Circuits.circuitId", not(hasItem("nurburgring")));
     }

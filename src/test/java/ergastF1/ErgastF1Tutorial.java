@@ -2,6 +2,7 @@ package ergastF1;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -21,6 +22,15 @@ public class ErgastF1Tutorial {
                 then().
                 assertThat().
                 body("MRData.CircuitTable.Circuits.circuitId", hasSize(20));
+
+
+        given().
+                when().
+                get("http://ergast.com/api/f1/2018/circuits.json").
+                then().
+                assertThat().
+                body("MRData.CircuitTable.Circuits[0].Location.locality",
+                        equalTo("Melbourne"));
     }
 
     @Test
@@ -36,6 +46,7 @@ public class ErgastF1Tutorial {
                 contentType(ContentType.JSON).
                 and().
                 header("Content-Length", equalTo("4551"));
+
     }
 
     @Test
@@ -66,6 +77,7 @@ public class ErgastF1Tutorial {
                 then().
                 assertThat().
                 body("MRData.CircuitTable.Circuits.circuitId", hasSize(numberOfRaces));
+
     }
 
     @DataProvider(name = "raceSeasonAndNumberOfRaces")
@@ -141,7 +153,7 @@ public class ErgastF1Tutorial {
                 get("http://ergast.com/api/f1/circuits/{circuitId}.json").
                 then().
                 assertThat().
-                body("MRData.CircuitTable.Circuits.Location[0].country", equalTo("Australia"));
+                body("MRData.CircuitTable.Circuits.Location.country", equalTo("Australia"));
     }
 
     // ResponseSpecs helpful if you have common validations among multiple test cases
