@@ -1,5 +1,2 @@
 .idea/
 *.class
-/target/**
-/target/
-*/target/**
